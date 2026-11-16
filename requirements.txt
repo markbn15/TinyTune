@@ -1,0 +1,6 @@
+pygame-ce
+pystray
+Pillow
+mutagen
+customtkinter
+pyinstaller
