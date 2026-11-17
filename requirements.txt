@@ -1,6 +1,6 @@
-pygame-ce
-pystray
-Pillow
-mutagen
-customtkinter
-pyinstaller
+pygame-ce>=2.5
+pystray>=0.19.5
+Pillow>=10.0
+mutagen>=1.47
+customtkinter>=5.2
+pyinstaller>=6.10

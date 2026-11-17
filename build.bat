@@ -1,34 +1,28 @@
 @echo off
-title Compilando TinyTune
-echo =======================================
-echo === 1. Instalando dependencias ===
-echo =======================================
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+setlocal
+cd /d "%~dp0"
 
-echo.
-echo =======================================
-echo === 2. Limpiando compilaciones viejas ===
-echo =======================================
+echo Instalando dependencias...
+python -m pip install --upgrade pip
+if errorlevel 1 goto :error
+python -m pip install -r requirements.txt
+if errorlevel 1 goto :error
+
+echo Limpiando compilaciones anteriores...
 if exist "build" rmdir /s /q "build"
 if exist "dist" rmdir /s /q "dist"
-if exist "TinyTune.spec" del /q "TinyTune.spec"
+
+echo Generando ejecutable...
+python -m PyInstaller --noconfirm --clean TinyTune.spec
+if errorlevel 1 goto :error
 
 echo.
-echo =======================================
-echo === 3. Generando ejecutable ===
-echo =======================================
-python -m PyInstaller --noconfirm --onefile --windowed ^
-    --icon "icon.ico" ^
-    --add-data "icon.ico;." ^
-    --collect-all customtkinter ^
-    --collect-all pygame ^
-    --name "TinyTune" ^
-    tinytune.py
-
-echo.
-echo =======================================
-echo === 4. Proceso terminado ===
-echo =======================================
-echo El ejecutable final esta en: dist\TinyTune.exe
+echo Listo: dist\TinyTune.exe
 pause
+exit /b 0
+
+:error
+echo.
+echo La compilacion fallo. Revisa el mensaje anterior.
+pause
+exit /b 1

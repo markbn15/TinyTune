@@ -1,17 +1,22 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
+from PyInstaller.utils.hooks import collect_all, collect_submodules
 
-datas = [('icon.ico', '.')]
+datas = [("icon.ico", ".")]
 binaries = []
-hiddenimports = []
-tmp_ret = collect_all('customtkinter')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
-tmp_ret = collect_all('pygame')
-datas += tmp_ret[0]; binaries += tmp_ret[1]; hiddenimports += tmp_ret[2]
+hiddenimports = [
+    "pystray._win32",
+    "PIL._tkinter_finder",
+    "pygame.mixer",
+]
 
+ctk_datas, ctk_binaries, ctk_hidden = collect_all("customtkinter")
+datas += ctk_datas
+binaries += ctk_binaries
+hiddenimports += ctk_hidden
+hiddenimports += collect_submodules("mutagen")
 
 a = Analysis(
-    ['tinytune.py'],
+    ["tinytune.py"],
     pathex=[],
     binaries=binaries,
     datas=datas,
@@ -19,9 +24,22 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        "pygame.tests",
+        "pygame.examples",
+        "pygame.docs",
+        "tkinter.test",
+        "test",
+        "unittest",
+        "pytest",
+        "pydoc_data",
+        "setuptools",
+        "pip",
+        "wheel",
+        "pkg_resources",
+    ],
     noarchive=False,
-    optimize=0,
+    optimize=1,
 )
 pyz = PYZ(a.pure)
 
@@ -31,11 +49,11 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='TinyTune',
+    name="TinyTune",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
-    upx=True,
+    upx=False,
     upx_exclude=[],
     runtime_tmpdir=None,
     console=False,
@@ -44,5 +62,6 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
-    icon=['icon.ico'],
+    icon=["icon.ico"],
+    version="version_info.txt",
 )
