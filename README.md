@@ -111,3 +111,5 @@ python tinytune.py
 Desarrollado con cariño por [**@markbn115**](https://www.instagram.com/markbn115/?hl=es).
 
 Si te gusta el proyecto, ¡deja una estrella ⭐ en el repo!
+
+(Ayuda demasiado en mi CV)
